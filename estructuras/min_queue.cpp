@@ -5,9 +5,8 @@ struct min_queue{
     // Queue that uses an arbitrary associative binary operation op(x,y)
     // Answers in O(1) the result of applying this operation to every element in the queue
     stack< pair<type, type> > s1, s2;
-    int size(){
-        return s1.size() + s2.size();
-    }
+    bool empty(){ return s1.empty() and s2.empty(); }
+    int size(){ return s1.size() + s2.size(); }
     type get(){
         if(s1.empty() or s2.empty())
             return s1.empty() ? s2.top().second : s1.top().second;
@@ -25,7 +24,8 @@ struct min_queue{
             type m = s2.empty() ? elem : op(elem, s2.top().second);
             s2.push( make_pair(elem, m) );
         }
+        type res = s2.top().first;
         s2.pop();
-        return s2.top().first;
+        return res;
     }
 };
