@@ -1,62 +1,27 @@
-#include <bits/stdc++.h>
-using namespace std;
-#define dprint(v) cout << #v"=" << v << endl //;)
-#define forr(i,a,b) for(int i=(a); i<(b); i++)
-#define forn(i,n) forr(i,0,n)
-#define dforn(i,n) for(int i=n-1; i>=0; i--)
-#define forall(it,v) for(typeof(v.begin()) it=v.begin();it!=v.end();++it)
-#define sz(c) ((int)c.size())
-#define zero(v) memset(v, 0, sizeof(v))
-#define pb push_back
-#define fst first
-#define snd second
-typedef long long ll;
-typedef pair<int,int> ii;
-const int MAXN=100100;
-
-vector<int> G[MAXN]; int n,m,p[MAXN],d[MAXN],d2[MAXN];
-int bfs(int r, int *d) {
-	queue<int> q;
-	d[r]=0; q.push(r);
+// AC - https://codeforces.com/contest/1092/submission/47239653
+int N, M;
+vector<int> G[MAXN], p(MAXN), df(MAXN), ds(MAXN);
+int bfs(int r, vector<int>& d){
+	queue<int> Q;
+	Q.push(r); d[r] = 0;
 	int v;
-	while(sz(q)) { v=q.front(); q.pop();
-		forall(it,G[v]) if (d[*it]==-1)
-			d[*it]=d[v]+1, p[*it]=v, q.push(*it);
+	while(Q.size()){
+        v = Q.front(); Q.pop();
+		for(auto &e : G[v]) if(d[e] == -1)
+			d[e] = d[v]+1, p[e] = v, Q.push(e);
 	}
-	return v;//ultimo nodo visitado
+	return v; //last visited node
 }
-vector<int> diams; vector<ii> centros;
-void diametros(){
-	memset(d,-1,sizeof(d));
-	memset(d2,-1,sizeof(d2));
-	diams.clear(), centros.clear();
-	forn(i, n) if(d[i]==-1){
-		int v,c;
-		c=v=bfs(bfs(i, d2), d);
-		forn(_,d[v]/2) c=p[c];
-		diams.pb(d[v]);
-		if(d[v]&1) centros.pb(ii(c, p[c]));
-		else centros.pb(ii(c, c));
+vector<int> diams; vector<pii> centers;
+void get_diams(){
+	fill(df.begin(), df.end(), -1);
+	fill(ds.begin(), ds.end(), -1);
+	diams.clear(), centers.clear();
+	int v, c;
+	forn(i, N) if(df[i] == -1){
+		c = v = bfs(bfs(i, ds), df);
+		forn(_, df[v]/2) c = p[c];
+		diams.pb(df[v]);
+		centers.pb({c, df[v]&1 ? p[c] : c});
 	}
-}
-
-int main() {
-	freopen("in", "r", stdin);
-	while(cin >> n >> m){
-		forn(i,m) { int a,b; cin >> a >> b; a--, b--;
-			G[a].pb(b);
-			G[b].pb(a);
-		}
-		diametros();
-		cout << "Diametros: ";
-		forall(it, diams) cout << *it << ' '; cout << endl;
-		cout << "Centros:" << endl;
-		forall(it, centros){
-			cout << '\t';
-			if(it->fst==it->snd) cout << it->fst+1 << endl;
-			else cout << it->fst+1 << "-" << it->snd+1 << endl;
-		}
-		zero(G);
-	}
-	return 0;
 }
