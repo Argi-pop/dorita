@@ -2,15 +2,15 @@
 int N, M;
 vector<int> G[MAXN], p(MAXN), df(MAXN), ds(MAXN);
 int bfs(int r, vector<int>& d){
-	queue<int> Q;
-	Q.push(r); d[r] = 0;
-	int v;
-	while(Q.size()){
+    queue<int> Q;
+    Q.push(r); d[r] = 0;
+    int v;
+    while(Q.size()){
         v = Q.front(); Q.pop();
-		for(auto &e : G[v]) if(d[e] == -1)
-			d[e] = d[v]+1, p[e] = v, Q.push(e);
-	}
-	return v; //last visited node
+        for(auto &e : G[v]) if(d[e] == -1)
+            d[e] = d[v]+1, p[e] = v, Q.push(e);
+    }
+    return v; //last visited node
 }
 vector<int> diams; vector<pii> centers;
 void get_diams(){
