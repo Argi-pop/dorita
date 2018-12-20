@@ -1,30 +1,27 @@
+// AC ARRAYSUB - https://www.spoj.com/status/ns=22910678#
 #define op(x,y) min(x,y)
-#define type int
-
+template<class T>
 struct min_queue{
-    // Queue that uses an arbitrary associative binary operation op(x,y)
-    // Answers in O(1) the result of applying this operation to every element in the queue
-    stack< pair<type, type> > s1, s2;
-    bool empty(){ return s1.empty() and s2.empty(); }
+    stack<pair<T,T>> s1, s2;
     int size(){ return s1.size() + s2.size(); }
-    type get(){
+    T get(){
         if(s1.empty() or s2.empty())
-            return s1.empty() ? s2.top().second : s1.top().second;
-        return op(s1.top().second, s2.top().second);
+            return s1.empty() ? s2.top().snd : s1.top().snd;
+        return op(s1.top().snd, s2.top().snd);
     }
-    void push(type elem){
-        type m = s1.empty() ? elem : op(elem, s1.top().second);
-        s1.push( make_pair(elem, m) );
+    void push(T elem){
+        T m = s1.empty() ? elem : op(elem, s1.top().snd);
+        s1.push({elem, m});
     }
-    type pop(){
+    T pop(){
         if(s2.empty())
         while(!s1.empty()){
-            type elem = s1.top().first;
+            T elem = s1.top().fst;
             s1.pop();
-            type m = s2.empty() ? elem : op(elem, s2.top().second);
-            s2.push( make_pair(elem, m) );
+            T m = s2.empty() ? elem : op(elem, s2.top().snd);
+            s2.push({elem, m});
         }
-        type res = s2.top().first;
+        T res = s2.top().fst;
         s2.pop();
         return res;
     }
