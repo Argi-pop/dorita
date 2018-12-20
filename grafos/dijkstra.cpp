@@ -1,23 +1,18 @@
-#define INF 1e9
-int N;
-#define MAX_V 250001
-vector<ii> G[MAX_V];
-//To add an edge use
-#define add(a, b, w) G[a].pb(make_pair(w, b))
-ll dijkstra(int s, int t){//O(|E| log |V|)
-	priority_queue<ii, vector<ii>, greater<ii> > Q;
-	vector<ll> dist(N, INF); vector<int> dad(N, -1);
-	Q.push(make_pair(0, s)); dist[s] = 0;
-	while(sz(Q)){
-		ii p = Q.top(); Q.pop();
-		if(p.snd == t) break;
-		forall(it, G[p.snd])
-			if(dist[p.snd]+it->first < dist[it->snd]){
-				dist[it->snd] = dist[p.snd] + it->fst;
-				dad[it->snd] = p.snd;
-				Q.push(make_pair(dist[it->snd], it->snd));	}
+// AC - https://codeforces.com/contest/20/submission/47280560
+vector<pll> G[MAXN];  // u->[(v,cost)]
+ll dist[MAXN], dad[MAXN];
+void dijkstra(ll x){
+	memset(dist,-1,sizeof(dist));
+	memset(dad,-1,sizeof(dad));
+	priority_queue<pll> Q;
+	dist[x]=0; Q.push({0,x});
+	while(!Q.empty()){
+		x=Q.top().snd; ll c=-Q.top().fst; Q.pop();
+		if(dist[x]!=c)continue;
+		forn(i,G[x].size()){
+			ll y=G[x][i].fst, c=G[x][i].snd;
+			if(dist[y]<0 || dist[x]+c<dist[y])
+				dist[y]=dist[x]+c, Q.push({-dist[y],y}), dad[y]=x;
+		}
 	}
-	return dist[t];
-	if(dist[t]<INF)//path generator
-		for(int i=t; i!=-1; i=dad[i])
-			printf("%d%c", i, (i==s?'\n':' '));}
+}
