@@ -1,25 +1,34 @@
 struct Hash {
-	int P=1777771,MOD[2],PI[2];
-	vector<int> h[2],pi[2];
+	int p = 1777771, mod[2], pInv[2];
+	//~ h[k][i] = hash[k]( s[0, i) )
+	//~ p**i * potInv[k][i] = 1 modulo mod[k]
+	vector<int> h[2],potInv[2];
 	Hash(string& s){
-		MOD[0]=999727999;MOD[1]=1070777777;
-		PI[0]=325255434;PI[1]=10018302;
-		forr(k,0,2)h[k].resize(s.size()+1),pi[k].resize(s.size()+1);
-		forr(k,0,2){
-			h[k][0]=0;pi[k][0]=1;
-			ll p=1;
-			forr(i,1,s.size()+1){
-				h[k][i]=(h[k][i-1]+p*s[i-1])%MOD[k];
-				pi[k][i]=(1LL*pi[k][i-1]*PI[k])%MOD[k];
-				p=(p*P)%MOD[k];
+		mod[0] = 999727999; mod[1] = 1070777777;
+		//~ Modular inverse of p
+		pInv[0] = 325255434; pInv[1] = 10018302;
+		forn(k,2){
+			h[k].resize(s.size()+1);
+			potInv[k].resize(s.size()+1);
+		}
+		forn(k,2){
+			h[k][0] = 0;
+			potInv[k][0] = 1;
+			ll pAcum = 1;
+			forr(i, 1, s.size()+1){
+				h[k][i] = (h[k][i-1] + pAcum * s[i-1]) % mod[k];
+				potInv[k][i] = (1LL * potInv[k][i-1] * pInv[k]) % mod[k];
+				pAcum = (pAcum * p) % mod[k];
 			}
 		}
 	}
+	//~ get(i, j) = hash( s[i,j) )
 	ll get(int s, int e){
-		ll h0=(h[0][e]-h[0][s]+MOD[0])%MOD[0];
-		h0=(1LL*h0*pi[0][s])%MOD[0];
-		ll h1=(h[1][e]-h[1][s]+MOD[1])%MOD[1];
-		h1=(1LL*h1*pi[1][s])%MOD[1];
-		return (h0<<32)|h1;
+		ll hashes[2];
+		forn(k, 2){
+			hashes[k] = (h[k][e] - h[k][s] + mod[k]) % mod[k];
+			hashes[k] = (1LL * hashes[k] * potInv[k][s]) % mod[k];
+		}
+		return (hashes[0]<<32)|hashes[1];
 	}
 };
