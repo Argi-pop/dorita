@@ -1,46 +1,27 @@
-#include <iostream>
-#include <cstdio>
-#include <cstdlib>
-#include <cstring>
-#include <algorithm>
-#include <vector>
-#include <string>
-using namespace std;
-#define dprint(v) cerr << #v"=" << v << endl //;)
-#define forr(i,a,b) for(int i=(a); i<(b); i++)
-#define forn(i,n) forr(i,0,n)
-#define dforsn(i,a,b) for(int i=(b)-1; i>=a; i--)
-#define forall(it,v) for(typeof(v.begin()) it=v.begin();it!=v.end();++it)
-#define sz(c) ((int)c.size())
-#define zero(v) memset(v, 0, sizeof(v))
-typedef long long ll;
-typedef pair<int,int> ii;
-const int MAXN=100000;
-struct UF{
-    void init(int n){}
-    void unir(int a, int v){}
-    int comp(int n){return 0;}
-}uf;
-vector<ii> G[MAXN];
-int n;
-
-struct Ar{int a,b,w;};
-bool operator<(const Ar& a, const Ar &b){return a.w<b.w;}
-vector<Ar> E;
-ll kruskal(){
-    ll cost=0;
-    sort(E.begin(), E.end());//ordenar aristas de menor a mayor
-    uf.init(n);
-    forall(it, E){
-        if(uf.comp(it->a)!=uf.comp(it->b)){//si no estan conectados
-            uf.unir(it->a, it->b);//conectar
-            cost+=it->w;
-        }
+// Requires disjointSetjoin.cpp
+struct Edge{
+    int u, v;
+    ll weight;
+    bool operator < (Edge const& other) const{
+        return weight < other.weight;
     }
+};
+
+// Constructs MST from vector<Edge> e and stores it in result.
+// Returns the sum of the edges used.
+ll kruskal(int nodeAmount, vector<Edge> &ed, vector<vector<int>> &result){
+    ll cost = 0;
+    DSUFast dsu(nodeAmount);
+    sort(ed.begin(), ed.end());
+    result.assign(nodeAmount, vector<int>());
+
+    for(Edge e : ed)
+        if(dsu.find(e.u) != dsu.find(e.v)){
+            cost += e.weight;
+            result[e.u].pb(e.v);
+            result[e.v].pb(e.u);
+            dsu.join(e.u, e.v);
+        }
+
     return cost;
-}
-
-int main(){
-
-    return 0;
 }
