@@ -52,11 +52,12 @@ class DSUComp {
         }
 
         void join(int u, int v){
-            if(component[u].size() > component[v].size())
-                swap(u, v);
-
             int oldComp = find(u);
             int newComp = find(v);
+
+            if(component[oldComp].size() > component[newComp].size())
+                swap(oldComp, newComp);
+
             for(int w : component[oldComp]){
                 component[newComp].pb(w);
                 myComp[w] = newComp;
@@ -66,7 +67,7 @@ class DSUComp {
         }
 
         // Returns a reference!
-        vector <int> &getcomponent(int v){
+        vector <int> &getComponent(int v){
             return component[find(v)];
         }
 };

@@ -5,7 +5,6 @@ using namespace std;
 #define forn(i,n) forr(i,0,n)
 #define dforn(i,n) for(int i=int(n)-1; i>=0; --i)
 #define dprint(v) cout << #v"=" << v << endl //;)
-#define sz(c) ((int)c.size())
 #define zero(v) memset(v, 0, sizeof(v))
 #define forall(it,v) for(auto it=v.begin();it!=v.end();++it)
 #define pb push_back
