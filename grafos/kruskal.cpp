@@ -1,4 +1,4 @@
-// Requires disjointSetjoin.cpp
+// Requires disjointSetUnion.cpp
 struct Edge{
     int u, v;
     ll weight;
